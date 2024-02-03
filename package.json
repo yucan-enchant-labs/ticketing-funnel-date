@@ -1,0 +1,25 @@
+{
+  "name": "ticketing-funnel",
+  "version": "1.0.0",
+  "description": "Streamlined ticketing funnel built with Next.js.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start",
+    "test": "test"
+  },
+  "author": "Yucan Z.",
+  "license": "ISC",
+  "dependencies": {
+    "next": "^14.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "20.11.12",
+    "@types/react": "18.2.48",
+    "sass": "^1.70.0",
+    "typescript": "^5.3.3"
+  }
+}
