@@ -3,11 +3,20 @@ import { City } from "./lib/definitions";
 // import Dates from './pages/dates/page';
 import Link from 'next/link';
 import NavLinks from "./[city]/nav-links";
+import axios, { AxiosInstance } from 'axios';
+const constants = require("@/app/constants/index");
+const createAxiosInstance = (baseURL: string): AxiosInstance => {
+    return axios.create({
+        baseURL,
+        timeout: 30000,
+    });
+};
+
+export const axiosTicketure = createAxiosInstance(constants.TICKETURE_CACHE_API);
+export const axiosEnchant = createAxiosInstance(constants.ENCHANT_API);
+export const axiosWaiver = createAxiosInstance(constants.WAIVERS_API);
+export const axiosMagic = createAxiosInstance(constants.ENCHANT_API);
 export default function Page() {
-    const cities: City[] = [
-        { name: 'Washington, DC', venue: 'The W Park', code: 'wdc', sellerId: '90282123', city:'washington-dc' },
-        { name: 'Saint Jose', venue: 'Paypal Park', code: 'sjo', sellerId: '123123', city:'saint-jose' },
-    ]
     return (
         <main>
             123
@@ -18,7 +27,7 @@ export default function Page() {
                 className="flex items-center gap-5 self-start rounded-lg bg-blue-500 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-400 md:text-base"
             ><span>Dates</span>
             </Link>
-
+ 
           <NavLinks />
         </main>
     )

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge;">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+  <meta name="robots" content="all">
+  <!-- <meta name="description"
+    content="Choose how you’ll immerse yourself in the magic of Christmas. The classic experience with full access to the Village, Light Maze and Little Ones’ Play Place. Enhance your experience with priority access, exclusive lounges, an exquisite themed dinner, special festive drinks, snacks and more."> -->
+  <meta name="keywords" content="Enchant">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://tickets.enchantchristmas.com">
+  <meta property="og:title" content="Enchant Christmas - Buy Tickets">
+  <meta property="og:description"
+    content="Choose how you’ll immerse yourself in the magic of Christmas. The classic experience with full access to the Village, Light Maze and Little Ones’ Play Place. Enhance your experience with priority access, exclusive lounges, an exquisite themed dinner, special festive drinks, snacks and more.">
+  <meta property="og:image" content="https://enchantchristmas.com/wp-content/uploads/2023/05/Enchant_1200x630.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Enchant Christmas - Buy Tickets" />
+  <meta name="twitter:description"
+    content="Choose how you’ll immerse yourself in the magic of Christmas. The classic experience with full access to the Village, Light Maze and Little Ones’ Play Place. Enhance your experience with priority access, exclusive lounges, an exquisite themed dinner, special festive drinks, snacks and more." />
+  <meta name="twitter:image" content="https://enchantchristmas.com/wp-content/uploads/2023/05/Enchant_1200x630.jpg" />
+  <meta name="theme-color" content="#ffffff">
+  <meta name="msapplication-TileColor" content="#000000">
+
+
+  <link href="<%= BASE_URL %>favicon.ico" rel="icon">
+  <link href="<%= BASE_URL %>favicon-32x32.png" rel="shortcut icon" type="image/x-icon">
+  <link href="<%= BASE_URL %>favicon-256-256.png" rel="apple-touch-icon">
+
+  <!-- <link rel="preload" as="font" href="./fonts/ProximaNova/ProximaNova-Regular.woff" type="font/woff"
+    crossorigin="anonymous">
+  <link rel="preload" as="font" href="./fonts/majesti-banner/Majesti-Banner-Medium.woff" type="font/woff"
+    crossorigin="anonymous">
+  <link rel="preload" as="font" href="./fonts/ProximaNova/ProximaNova-Regular.otf" type="font/otf"
+    crossorigin="anonymous">
+  <link rel="preload" as="font" href="./fonts/majesti-banner/Majesti-Banner-Medium.otf" type="font/otf"
+    crossorigin="anonymous"> -->
+
+  <script type='text/javascript'
+    src='https://platform-api.sharethis.com/js/sharethis.js#property=646f96448b790100199498ef&product=sop'
+    async="async"></script>
+  <script src="https://js.stripe.com/v3/"></script>
+
+  <!-- Segment Tracking -->
+
+  <!-- SEGMENT SCRIPT 
+        Dev/Stage: Nt2fI3Ptn9VuOeXbf7CJyGWwi9zAZpmR
+        Prod: 6zABWKEGSJn01Y02cyyEyZnwzRd0xqaG
+        -->
+  <script async>
+    let SEGMENT_PROD_ID = "6zABWKEGSJn01Y02cyyEyZnwzRd0xqaG",
+      SEGMENT_DEV_ID = "Nt2fI3Ptn9VuOeXbf7CJyGWwi9zAZpmR";
+
+    let SEGMENT_KEY = '<%= NODE_ENV %>' === 'development' || '<%= NODE_ENV %>' == 'Staging' ? SEGMENT_DEV_ID : SEGMENT_PROD_ID;
+    !function () {
+      var analytics = window.analytics = window.analytics || []; if (!analytics.initialize) if (analytics.invoked) window.console && console.error && console.error("Segment snippet included twice."); else {
+        analytics.invoked = !0; analytics.methods = ["trackSubmit", "trackClick", "trackLink", "trackForm", "pageview", "identify", "reset", "group", "track", "ready", "alias", "debug", "page", "once", "off", "on", "addSourceMiddleware", "addIntegrationMiddleware", "setAnonymousId", "addDestinationMiddleware"]; analytics.factory = function (e) { return function () { var t = Array.prototype.slice.call(arguments); t.unshift(e); analytics.push(t); return analytics } }; for (var e = 0; e < analytics.methods.length; e++) { var key = analytics.methods[e]; analytics[key] = analytics.factory(key) } analytics.load = function (key, e) { var t = document.createElement("script"); t.type = "text/javascript"; t.async = !0; t.src = "https://cdn.segment.com/analytics.js/v1/" + key + "/analytics.min.js"; var n = document.getElementsByTagName("script")[0]; n.parentNode.insertBefore(t, n); analytics._loadOptions = e }; analytics._writeKey = SEGMENT_KEY;; analytics.SNIPPET_VERSION = "4.15.3";
+
+        analytics.load(SEGMENT_KEY);
+        analytics.page();
+        console.log("Segment Loaded: " + SEGMENT_KEY);
+      }
+    }();
+    console.log('Hello, Enchant World!');
+
+    /*
+    window.analytics.ready(function () {
+      ga('require', 'linker');
+      ga('linker:autoLink', ['enchantchristmas.com','dev.enchantchristmas.com']);
+    });
+    */
+  </script>
+
+  <!-- Kenys Tracking -->
+
+  <script src="https://js.adsrvr.org/up_loader.1.1.0.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    ttd_dom_ready(function () {
+      if (typeof TTDUniversalPixelApi === 'function') {
+        var universalPixelApi = new TTDUniversalPixelApi();
+        universalPixelApi.init("aqx2fr3", ["vsu19xd"], "https://insight.adsrvr.org/track/up");
+      }
+    });
+  </script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+  <script
+    src="//action.dstillery.com/orbserv/nsjs?adv=cl169937200902005&ns=8301&nc=Enchant-Christmas-Site-Visitor&ncv=42"
+    type="text/javascript"></script>
+  <noscript>
+    <img width="1" height="1"
+      src="//action.dstillery.com/orbserv/nspix?adv=cl169937200902005&ns=8301&nc=Enchant-Christmas-Site-Visitor&ncv=42" />
+  </noscript>
+
+  <title>
+    <%= htmlWebpackPlugin.options.title %>
+  </title>
+</head>
+<style>
+</style>
+
+<body style="margin: 0">
+  <div id="app"></div>
+  <script src="https://code.jquery.com/jquery-1.11.3.min.js" defer></script>
+  <!-- <script async
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAePheCNI_pUrBLLa7udrnLB32IsQ9RrmI&libraries=places&callback=initMap">
+  </script> -->
+</body>
+
+</html>
