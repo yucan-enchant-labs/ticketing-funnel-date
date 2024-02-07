@@ -8,7 +8,7 @@ const links = [
   //   href: '/general-admission/locations',
   //   icon: DocumentDuplicateIcon,
   // },
-  { name: 'Dates', href: '/dates', icon: UserGroupIcon },  // 修改此行的 href
+  { name: 'Dates', href: '/dates', icon: UserGroupIcon },
 ];
 
 export default function NavLinks() {

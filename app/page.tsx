@@ -18,17 +18,16 @@ export const axiosWaiver = createAxiosInstance(constants.WAIVERS_API);
 export const axiosMagic = createAxiosInstance(constants.ENCHANT_API);
 export default function Page() {
     return (
-        <main>
-            123
+        <>
             <LocationPage />
             {/* <Dates /> */}
-            <Link
+            {/* <Link
                 href="/dates"
                 className="flex items-center gap-5 self-start rounded-lg bg-blue-500 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-400 md:text-base"
             ><span>Dates</span>
-            </Link>
+            </Link> */}
  
           <NavLinks />
-        </main>
+        </>
     )
 }

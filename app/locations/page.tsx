@@ -1,8 +1,9 @@
 
 'use client'
 import { useRouter } from 'next/navigation';
-import { Cities } from '../components/Cities';
+import { Cities } from '../components/cities';
 import { City } from '@/app/lib/definitions';
+import { ContainerWrapper } from '../styles/container';
 // import { Metadata } from 'next';
 
 // export const metadata: Metadata = {
@@ -20,10 +21,11 @@ const LocationPage: React.FC = () => {
     };
 
     return (
-        <main>
+        <ContainerWrapper>
             <label htmlFor="Select Locations">Select the Location!</label>
-            <Cities cities={cities} onCityClick={handleCityClick} />
-        </main>
+            {/* <Cities cities={cities} onCityClick={handleCityClick} /> */}
+            <Cities cities={cities} />
+        </ContainerWrapper>
     );
 };
 

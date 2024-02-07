@@ -1,7 +1,7 @@
 export default function CusHeader(){
     return (
         <main>
-            enchant christmas
+            Get Tickets to Enchant
         </main>
     )
 }

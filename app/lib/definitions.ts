@@ -11,7 +11,7 @@ export type City = {
 
 export interface CitiesProps {
     cities: City[];
-    onCityClick: (city: string) => void;
+    // onCityClick: (city: string) => void;
 }
 
 export interface EventDataProps {

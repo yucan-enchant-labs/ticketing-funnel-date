@@ -9,6 +9,7 @@ export const uppercaseAtom = atom(
 )
 
 export const metaAtom = atom<MetaProps>({});
+export const ticketAtom = atom<any>({});
 // export const metaAtom = atom(
 //     (get) => get(meta)
 // )

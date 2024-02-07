@@ -1,47 +1,28 @@
+// Cities.tsx
 import { City } from "../lib/definitions";
-import { useAtom, useSetAtom } from 'jotai';
-import { metaAtom } from '@/app/states/common';
-import { eventTemplate } from "../queries/eventGroups";
-import { CitiesProps, EventDataProps } from "../lib/definitions";
+import { CitiesProps } from "../lib/definitions";
+import Link from "next/link";
+import { selectCity } from "../hooks/common";
+import { RowSBCard, ColCTCard } from "../styles/container";
 
-
-// const Meta = createContext(null);
-export const Cities: React.FC<CitiesProps> = ({ cities, onCityClick }) => {
-    const [meta, setMeta] = useAtom(metaAtom);
-    const setMetaAtom = useSetAtom(metaAtom);
-
-    const handleCityClick = async (city: City) => {
-        try {
-            const eventData = await eventTemplate(city.id);
-            // if(eventData?.sellerMeta){
-
-            const { sellerMeta, eventTemplates, eventMeta, suiteEventMeta } = eventData;
-            console.log(sellerMeta, 'ooo')
-            setMetaAtom((prevMeta) => ({
-                ...prevMeta,
-                city: city,
-                sellerMeta: sellerMeta || prevMeta!.sellerMeta,
-                eventTemplates: eventTemplates || prevMeta.eventTemplates,
-                eventMeta: eventMeta || prevMeta.eventMeta,
-                suiteEventMeta: suiteEventMeta || prevMeta.suiteEventMeta,
-            }));
-            // }
-
-            console.log('123', meta);
-
-            onCityClick(city.key);
-        } catch (error) {
-            console.error("Error handling city click:", error);
-        }
-    };
+export const Cities: React.FC<CitiesProps> = ({ cities }) => {
+    const { cityMeta } = selectCity();
     return (
-        <div className="grid grid-cols-1 gap-4">
+        <>
             {cities.map((city) => (
-                <div key={city.key} onClick={() => handleCityClick(city)} className="p-4 border rounded">
-                    <h3 className="text-lg font-semibold">{city.city}</h3>
-                    <p>{city.venueName}</p>
-                </div>
+                <ColCTCard key={city.key} onClick={() => cityMeta(city)}>
+                    <RowSBCard>
+                        <Link
+                            href={`${city.key}/general-admission`}
+                            className="font-sans font-normal text-base normal-nums lining-nums hover:text-xl"
+                        >
+                            <h3 className="inline-block text-lg font-semibold">{city.city}</h3>
+                            <p>{city.venueName}</p>
+                        </Link>
+                    </RowSBCard>
+                </ColCTCard>
+
             ))}
-        </div>
-    )
-}
+        </>
+    );
+};

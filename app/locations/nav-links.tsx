@@ -12,8 +12,6 @@ const links = [
   { name: 'Home', href: '/', icon: HomeIcon },
   { name: 'Dates', href: '/[city]/dates', icon: UserGroupIcon },
 ];
-const gaLink = { name: 'Tickets', href: '/[city]/general-admission', icon: UserGroupIcon };
-links.push(gaLink);
 
 export default function NavLinks({ city }: { city: City }) {
   const pathname = usePathname();

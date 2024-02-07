@@ -7,3 +7,12 @@ export type MetaProps = {
     eventMeta?: any,
     suiteEventMeta?: any,
 }
+
+export type TicketMetaData = {
+    ticketTypes: Array<any>,
+    ticketGroups: Array<any>,
+    addonGroups: Array<any>,
+    addonEvents: Array<any>,
+    addonEventDetails: Array<any>,
+    eventTemplates: Array<any>
+}
