@@ -1,15 +1,14 @@
-import { useSetAtom } from 'jotai';
-import { useRouter } from 'next/navigation';
-import { metaAtom, ticketAtom } from '@/app/states/common';
-import { eventTemplate } from "../queries/eventGroups";
+import { useSetAtom, useAtomValue } from 'jotai';
+import { metaAtom, ticketAtom, sessionAtom } from '@/app/states/common';
+import { eventTemplate, getCalendar } from "../queries/eventGroups";
 import { City } from '../lib/definitions';
 import { useState } from 'react';
 
 export const selectCity = () => {
-  const [isAddon, setIsAddon] = useState<boolean>(false);
   const setMetaAtom = useSetAtom(metaAtom);
   const setTicketMeta = useSetAtom(ticketAtom);
-  const router = useRouter();
+  const setAvailableMeta = useSetAtom(sessionAtom);
+  const [isAddon, setIsAddon] = useState<boolean>(false);
 
   const cityMeta = async (city: City) => {
     try {
@@ -17,8 +16,21 @@ export const selectCity = () => {
       const eventData = await eventTemplate(city.id);
       const { sellerMeta, eventTemplates, eventMeta, suiteEventMeta } = eventData;
       const ticketTypes = eventTemplates.ticket_type._data;
-      const ticketGroups = eventTemplates.ticket_group;
+      const ticketGroups = eventTemplates.ticket_group._data;
       const meta: any = eventTemplates.meta._data;
+
+      // createCalendar
+      const { gaEventTmpId, gaGroupIds } = createCalendar(ticketTypes, ticketGroups);
+      const requestCalendar = await getCalendar(gaEventTmpId, gaGroupIds, city.id);
+      setAvailableMeta((props:any) => ({
+        ...props,
+        eventInfo: {
+          gaEventTmpId,
+          gaGroupIds,
+          cityId: city.id,
+        },
+        calendar: requestCalendar,
+      }));
       for (const item of ticketTypes) {
         item.qty = 0;
       }
@@ -29,7 +41,7 @@ export const selectCity = () => {
         if (metaItem.metakey === "event_type" && metaItem.value.trim() === "addon") {
           addonMeta.push(metaItem);
         }
-      
+
         if (metaItem.metakey === "icon_link") {
           iconMeta.push(metaItem);
         }
@@ -46,13 +58,15 @@ export const selectCity = () => {
         if (metaItem.resource === "ticket_group") {
           const groupIdx = eventTemplates.ticket_group._data.findIndex((e: any) => e.id === metaItem.resource_id);
           if (groupIdx !== -1) {
-            ticketGroups._data[groupIdx][metaItem.metakey] = metaItem.value;
+            ticketGroups[groupIdx][metaItem.metakey] = metaItem.value;
           }
         }
       }
 
       const addonEvent: any = [];
       const tempEvents: any = [];
+      const gaGroupId = ticketGroups.filter((type: any) => type.name.includes('Admission'))[0]?.id;
+      const gaEvents = ticketTypes.filter((type:any)=>type?.ticket_group_id === gaGroupId);
 
       for (let j = 0; j < eventTemplates.event_template._data.length; j++) {
         setIsAddon(false);
@@ -70,9 +84,9 @@ export const selectCity = () => {
         }
       }
 
-      const tmpGroup: typeof ticketGroups._data = [];
-      const tmpAddonGroups: typeof ticketGroups._data = [];
-      for (const ticketGroup of ticketGroups._data) {
+      const tmpGroup: typeof ticketGroups = [];
+      const tmpAddonGroups: typeof ticketGroups = [];
+      for (const ticketGroup of ticketGroups) {
         let isAddon = false;
         for (const addon of addonMeta) {
           if (ticketGroup.event_template_id === addon.resource_id) {
@@ -124,16 +138,31 @@ export const selectCity = () => {
         ticketTypes: ticketTypes,
         ticketGroups: tmpGroup,
         addonGroups: tmpAddonGroups,
+        gaEvents: gaEvents,
         addonEvents: addonEvent,
         addonEventDetails: tmpAddonEventDetails,
         eventTemplates: tempEvents,
       }))
-      
+
     } catch (error) {
       console.error("Error handling city click:", error);
     }
-    router.push(`${city.key}/general-admission`);
+    // router.push(`${city.key}/general-admission`);
   };
-
   return { cityMeta };
 };
+
+
+const createCalendar = (ticketTypes: any, ticketGroup: any) => {
+  // Obtain admission-group id including Suite Admission
+  const gaGroupInfo = ticketGroup.filter((type: any) => type.name.includes('Admission'));
+  const gaGroupIds = gaGroupInfo.map((type: any) => type.id).join(",");
+  const gaEventTmpId = gaGroupInfo[0]?.event_template_id;
+  return { gaEventTmpId, gaGroupIds };
+}
+
+export const selectDate = async () => {
+  const ticketInfo = useAtomValue(sessionAtom);
+  console.log(ticketInfo, 'infofofo')
+  // const eventData = await getSessions(city.id);
+}

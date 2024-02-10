@@ -1,7 +1,7 @@
+'use client'
 import LocationPage from "./locations/page"
-import { City } from "./lib/definitions";
-// import Dates from './pages/dates/page';
-import Link from 'next/link';
+import { ContainerWrapper } from "./styles/container";
+import CusHeader from "./ui/layouts/header";
 import NavLinks from "./[city]/nav-links";
 import axios, { AxiosInstance } from 'axios';
 const constants = require("@/app/constants/index");
@@ -18,7 +18,8 @@ export const axiosWaiver = createAxiosInstance(constants.WAIVERS_API);
 export const axiosMagic = createAxiosInstance(constants.ENCHANT_API);
 export default function Page() {
     return (
-        <>
+        <ContainerWrapper>
+            <CusHeader />
             <LocationPage />
             {/* <Dates /> */}
             {/* <Link
@@ -28,6 +29,6 @@ export default function Page() {
             </Link> */}
  
           <NavLinks />
-        </>
+        </ContainerWrapper>
     )
 }

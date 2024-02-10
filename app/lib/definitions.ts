@@ -14,6 +14,12 @@ export interface CitiesProps {
     // onCityClick: (city: string) => void;
 }
 
+interface fullAvailabilityWithPriceProps {
+    event_session: Array<object>,
+    price_schedule: object,
+    limit: Array<object>,
+}
+
 export interface EventDataProps {
     eventResp?: any;
     sellerMeta?: any;
@@ -21,3 +27,17 @@ export interface EventDataProps {
     eventMeta?: any;
     suiteEventMeta?: any;
 }
+
+
+export interface CalendarProps {
+    calendar: Record<string, any>;
+}
+
+export interface SessionsProps {
+    sessions: Array<any>;
+}
+
+// export interface SessionProps {
+//     fullAvailability: Array<object>,
+//     fullAvailabilityWithPrice: fullAvailabilityWithPriceProps,
+// }

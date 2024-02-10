@@ -12,6 +12,7 @@ export type TicketMetaData = {
     ticketTypes: Array<any>,
     ticketGroups: Array<any>,
     addonGroups: Array<any>,
+    gaEvents: Array<any>,
     addonEvents: Array<any>,
     addonEventDetails: Array<any>,
     eventTemplates: Array<any>

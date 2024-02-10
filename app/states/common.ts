@@ -10,6 +10,17 @@ export const uppercaseAtom = atom(
 
 export const metaAtom = atom<MetaProps>({});
 export const ticketAtom = atom<any>({});
+export const sessionAtom = atom({
+  calendar: {},
+  sessions: [],
+  selectedDate: "",
+  selectedSession: "",
+  eventInfo:{
+    gaEventTmpId: "",
+    gaGroupIds:"",
+    cityId: "",
+  },
+});
 // export const metaAtom = atom(
 //     (get) => get(meta)
 // )
