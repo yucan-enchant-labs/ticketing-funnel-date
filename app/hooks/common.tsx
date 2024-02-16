@@ -1,6 +1,6 @@
 import { useSetAtom, useAtomValue } from 'jotai';
 import { metaAtom, ticketAtom, sessionAtom } from '@/app/states/common';
-import { eventTemplate, getCalendar } from "../queries/eventGroups";
+import { eventTemplate, getCalendar } from "../apis/eventGroups";
 import { City } from '../lib/definitions';
 import { useState } from 'react';
 

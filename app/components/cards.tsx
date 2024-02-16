@@ -8,3 +8,12 @@ export const TicketCard: React.FC<{ meta: TicketMeta }> = ({ meta }) => {
         </div>
     );
 };
+
+export const ReviewCard: React.FC =() => {
+
+    return (
+        <div>
+            order details
+        </div>
+    )
+}

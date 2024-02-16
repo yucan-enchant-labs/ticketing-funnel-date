@@ -36,3 +36,8 @@ export type TicketProps = {
     summary: string;
     ticket_group_id: string;
 }
+
+export type tempCartProps = {
+    event_session_id?: string,
+    ticket_type_id?: string
+}

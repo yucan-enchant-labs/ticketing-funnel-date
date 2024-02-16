@@ -10,7 +10,7 @@ import { formatDate } from "../lib/formattedDate"
 import { useEffect } from "react"
 import { useAtom, useSetAtom } from "jotai"
 import { metaAtom, sessionAtom } from "../states/common"
-import { getSessions } from "../queries/eventGroups"
+import { getSessions } from "../apis/eventGroups"
 
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>
@@ -30,7 +30,6 @@ function Calendar({
   const [meta] = useAtom(metaAtom);
 
   const { eventInfo } = sessionInfo;
-  console.log(sessionInfo, 'yayaya')
   const handleDayClick = async (date: any) => {
     setSelectedDate(date);
     // const formattedDate = formatDate(date, timezone, 'yyyy-MM-dd');

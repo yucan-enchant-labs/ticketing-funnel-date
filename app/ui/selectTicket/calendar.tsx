@@ -69,17 +69,20 @@ export const EncTime = ({ sessions, timezone }: { sessions: any[], timezone: str
 
   useEffect(() => {
     const formattedTimes = sessions.map((time: any) => ({
-      id: time.id, // 为每个时间对象添加一个id属性
-      formattedTime: formatDate(time.start_datetime, timezone, "h:mm"),
+      id: time.id,
+      formattedTimeStart: formatDate(time.start_datetime, timezone, "h:mm"),
+      formattedTimeEnd: formatDate(time.end_datetime, timezone, "h:mm a"),
     }));
     setTimes(formattedTimes);
   }, [sessions, timezone]);
 
-  const handleTimeClick = (timeId: string) => {
+  const handleTimeClick = (timeId: string, start: string, end:string) => {
     setSelectedTime(timeId);
     setSelectedSession((props: any) => ({
       ...props,
-      selectedSession: timeId,
+      selectedSessionId: timeId,
+      sessionStart: start,
+      sessionEnd: end,
     }));
   };
 
@@ -95,9 +98,9 @@ export const EncTime = ({ sessions, timezone }: { sessions: any[], timezone: str
                   key={time.id}
                   className={`h-[46px] p-4 text-center border border-solid border-gray-300 font-inter text-base font-bold cursor-pointer transition duration-300 ease-in-out ${selectedTime === time.id ? 'bg-gray-800 text-white' : 'hover:bg-gray-800 hover:text-white'
                     }`}
-                  onClick={() => handleTimeClick(time.id)}
+                  onClick={() => handleTimeClick(time.id, time.formattedTimeStart,time.formattedTimeEnd)}
                 >
-                  {time.formattedTime}
+                  {time.formattedTimeStart}
                 </td>
               ))}
             </tr>

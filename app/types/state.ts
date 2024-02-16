@@ -17,3 +17,10 @@ export type TicketMetaData = {
     addonEventDetails: Array<any>,
     eventTemplates: Array<any>
 }
+
+
+export type ErrorProps = {
+    type: string,
+    status: boolean,
+    msg: string
+}

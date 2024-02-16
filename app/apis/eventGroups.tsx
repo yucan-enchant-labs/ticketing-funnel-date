@@ -69,36 +69,3 @@ export const getSessions = async (eventId: string, groupId: string, date: string
         throw error;
     }
 }
-
-
-// https://enchant.web.d1tix.com/cached_api/events/0188db13-48af-cfba-d892-2bc649e8fe3d/calendar?_seller=0188db13-48af-ca00-bea4-2af061d2e396&ticket_group_id._in=0188db13-6794-5ea9-5cb2-2054a843ba70,0188db13-6794-eada-1f66-c715c43ba6e0
-
-// export const getFullAvailability = async (eventId: string, body: any): Promise<SessionProps> => {
-//     try{
-//         const requestSessions = async () => {
-//             try {
-                
-//               const response = await axiosTicketure.get(`/cached_api/events/available`);
-//             //   const response = await axiosTicketure.get(`/cached_api/events/${eventId}/sessions?_limit=1000`);
-//             //   const resp = await axiosTicketure.post(`/api/events/${eventId}/sessions?_limit=1000`, body);
-        
-//             //   return { resp, response };
-//             return response;
-//             } catch (error) {
-//               console.log("ERROR", error);
-//               throw error;
-//             }
-//           };
-//           const availableSessions = await requestSessions();
-//           const fullAvailability = availableSessions.response.data.event_session._data;
-//           const fullAvailabilityWithPrice = availableSessions.resp.data;
-
-//           return {
-//             fullAvailability,
-//             fullAvailabilityWithPrice,
-//         } as SessionProps;
-//         }catch(err){
-
-//         }
-    
-// };

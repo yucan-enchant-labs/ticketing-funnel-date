@@ -91,3 +91,42 @@ export const RowFSCard = styled.div<FlexStart>`
         gap: ${props.gap}px;
     `}
 `;
+
+export const PaymentOptContainer = styled.div`
+  font-family: "Proxima Nova";
+  font-size: 16px;
+  line-height: 20px;
+  box-sizing: border-box;
+  border: 1px solid #bbbbbb;
+  border-radius: 4px;
+
+  .el-collapse-item__header {
+    padding: 0 16px;
+  }
+
+  .el-collapse-item__arrow {
+    display: none;
+  }
+`;
+
+export const PaymentOptContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  gap: 10px;
+  background: rgb(242, 239, 234);
+  border-width: 0px 1px 1px 1px;
+  border-style: solid;
+  border-color: #bbbbbb;
+  text-align: center;
+`;
+
+export const StripeContainer = styled.div`
+width: calc(100% - 32px);
+padding: 12px 1rem 12px 1rem;
+background-color: #ffffff;
+color: #041c2c !important;
+border-radius: 4px;
+`;
