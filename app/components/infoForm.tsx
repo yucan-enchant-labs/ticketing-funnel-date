@@ -1,12 +1,16 @@
-
+import { useState } from "react";
 import { Input } from "@/app/components/ui/input";
 import { Button } from "@/app/components/ui/button";
+import { Checkbox } from 'antd';
+import type { CheckboxProps } from 'antd';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useSetAtom } from "jotai";
+import { useSetAtom, useAtomValue } from "jotai";
 import { errorAtom } from "@/app/states/common";
 import { triggerPayment, userInfoAtom } from "@/app/states/order";
 import { userInfoProps } from "@/app/types/order";
+import { ErrorProps } from "../types/state";
+import Link from "next/link";
 import { z } from "zod";
 import {
     Form,
@@ -41,10 +45,15 @@ type UppercaseFirstLetter<T> = T extends `${infer U}${infer R}`
     : T;
 type FormSchemaType = UppercaseFirstLetter<z.infer<typeof formSchema>>;
 
-export const InfoForm: React.FC<{ onError: (errorType: string, errorMsg: string) => void }> = ({ onError }) => {
+export const InfoForm: React.FC<{
+    onError: (errorType: string, errorMsg: string) => void,
+    cityCode: string
+}> = ({ onError, cityCode }) => {
+    const [termsChecked, setTermsChecked] = useState<boolean>(false);
     const setTriggerPayment = useSetAtom(triggerPayment);
     const setUserInfo = useSetAtom(userInfoAtom);
     const setErrors = useSetAtom(errorAtom);
+    const errors = useAtomValue(errorAtom);
 
     const form = useForm<FormSchemaType>({
         resolver: zodResolver(formSchema),
@@ -65,10 +74,37 @@ export const InfoForm: React.FC<{ onError: (errorType: string, errorMsg: string)
         }
     };
 
+    const optStatement = (city_code: string) => {
+        if (city_code === "lrw") {
+            return `Yes, please sign me up to receive communication from Enchant and Resorts
+            World to hear all about the new magic, promotions, and special offers.`;
+        } else {
+            return `Yes, please sign me up to receive communication from Enchant to hear all
+            about the new magic, promotions, and special offers.`;
+        }
+    }
+    const acceptMarketing = () => {
+        console.log('marketing checked~')
+    };
+    const acceptSMS = () => {
+        console.log('sms checked~')
+
+    };
+    const acceptTicketTerms = (e: any) => {
+        const checked = e.target.checked;
+        setTermsChecked(checked);
+
+    };
+
     const onSubmit = async () => {
         // clear errors 
         setErrors([]);
-
+        if (!termsChecked) {
+            const errMsg = "Sorry, you must read and accept the Ticketing terms & conditions to process your order.";
+            onError('acceptTicketTermsError', errMsg);
+            console.log(errMsg, 'rerr', errors)
+            return;
+        }
         // start checking
         await form.trigger();
 
@@ -112,11 +148,33 @@ export const InfoForm: React.FC<{ onError: (errorType: string, errorMsg: string)
                             )}
                         />
                     ))}
-                    <Button type="button" onClick={onSubmit}> Complete Order
+                    <Checkbox onChange={acceptMarketing}>
+                        {optStatement(cityCode)}
+                    </Checkbox>
+                    <Checkbox onChange={acceptSMS}>I agree to receive SMS based marketing updates at the provided phone number.</Checkbox>
+                    <Checkbox onChange={acceptTicketTerms}>
+                        I’ve read and accept the{' '}
+                        <Link target="_blank" className="" rel="noopener noreferrer" href={`https://enchantchristmas.com/ticketing-terms`}>
+                            <span className="font-semibold">Ticketing Terms & Conditions</span>
+                        </Link>
+                        {' '}and{' '}
+                        <Link target="_blank" className="" rel="noopener noreferrer" href={`https://enchantchristmas.com/ticketing-terms`}>
+                            <span className="font-semibold"> Privacy Policy</span>
+                        </Link>
+                        {' '}of Enchant Christmas.
+
+                        {errors.some(error => error.type === 'acceptTicketTermsError') && (
+                            <p className="text-red-500">{errors.find(error => error.type === 'acceptTicketTermsError')?.msg}</p>
+                        )}
+
+                    </Checkbox>
+
+                    {/* Sorry, you must read and accept the Ticketing terms & conditions to process your order */}
+                    <Button type="button" onClick={onSubmit}>
+                        Complete Order
                     </Button>
                 </form>
             </Form>
         </>
-
     );
 };

@@ -17,7 +17,6 @@ export const PaymentOpts: React.FC<paymentElementProps> = ({ ...props }) => {
     const setPaymentMethod = useSetAtom(paymentMethod);
 
     const { browserType, stripeAccount, $stripe, amount, onError } = props;
-    console.log(browserType, stripeAccount, $stripe, amount)
     const { Panel } = Collapse;
     const text = `After clicking "Pay with ${browserType === "chrome" ? "Google" : "Apple"
         } Pay" you will be redirected to ${browserType === "chrome" ? "Google" : "Apple"
@@ -37,16 +36,12 @@ export const PaymentOpts: React.FC<paymentElementProps> = ({ ...props }) => {
     ];
 
     const selectPaymentMethod = (method: string) => {
-
-        console.log(selectedPayment,'sls')
         return () => {
             setPaymentMethod((props)=>({
                 ...props,
                 type: method,
             }));
             setSelectedPayment(method);
-            // setOtherPanelOpen(!otherPanelOpen);
-            // setCardPanelOpen(false);
         };
     };
 

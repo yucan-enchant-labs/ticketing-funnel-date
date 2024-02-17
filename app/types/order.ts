@@ -51,6 +51,7 @@ export type PaymentAdditionalInfoProps = {
     sms_marketing_opt_in?: string,
     newsletter?: boolean,
 }
+
 export type userInfoProps = {
     first_name: string,
     last_name: string,
@@ -58,3 +59,12 @@ export type userInfoProps = {
     phone?: string,
     additional_info?: PaymentAdditionalInfoProps,
 }
+
+export type CheckoutPostBodyProps = {
+    amount: number;
+    gateway_id: string;
+    gateway_data: any;
+    guest_identity_id: string;
+};
+
+export type AmountProps = { number: number; string: string } | null;
