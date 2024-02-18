@@ -1,7 +1,7 @@
 'use client'
 import { OrderReviewCard } from '@/app/components/order-review-card';
 import { useEffect, useState, useCallback } from 'react';
-import { useAtomValue, useSetAtom } from 'jotai';
+import { useAtomValue, useSetAtom, useAtom } from 'jotai';
 import { metaAtom, sessionAtom, errorAtom } from '@/app/states/common';
 import { selectedTicket, userInfoAtom, cartAtom, checkoutResultAtom } from '@/app/states/order';
 import { OrderDetailProps } from '@/app/types/order';
@@ -12,30 +12,26 @@ import { triggerPayment, paymentMethod } from '@/app/states/order';
 import { PaymentProps, CheckoutPostBodyProps, AmountProps } from '@/app/types/order';
 import { PaymentDetailInfoProps, userInfoProps, PaymentAdditionalInfoProps } from '@/app/types/order';
 import { getUserInfo, checkOut } from '@/app/apis/order';
-
-
+import { useRouter } from 'next/navigation'
 const RevewOrderPage: React.FC = () => {
     const [details, setDetails] = useState<OrderDetailProps | undefined>();
     const [checkoutPostBody, setCheckoutPostBody] = useState<CheckoutPostBodyProps | null>(null);
     const [currentErrors, setCurrentErrors] = useState<Array<ErrorProps>>([]);
     const [amount, setAmount] = useState<AmountProps>(null);
-    const [identityId, setIdentityId] = useState<string>('');
+    const [identityId, setIdentityId] = useState<string | null>(null);
     const [cardDetails, setCardDetails] = useState<object>({});
-    const isTriggerPayment = useAtomValue(triggerPayment);
+    const [hasRedirected, setHasRedirected] = useState<boolean>(false);
+
+    const [isTriggerPayment, setIsTriggerPayment] = useAtom(triggerPayment);
     const meta = useAtomValue(metaAtom);
     const tickets = useAtomValue(selectedTicket);
     const available = useAtomValue(sessionAtom);
     const cartInfo = useAtomValue(cartAtom);
     const infoDetails = useAtomValue(userInfoAtom);
     const payments = useAtomValue(paymentMethod);
-    const errors = useAtomValue(errorAtom);
-
-
-    const setCheckoutResp = useSetAtom(checkoutResultAtom);
-    const setTriggerPayment = useSetAtom(triggerPayment);
-    const setErrors = useSetAtom(errorAtom);
-
-
+    const [errors, setErrors] = useAtom(errorAtom);
+    const [checkoutResp, setCheckoutResp] = useAtom(checkoutResultAtom);
+    const router = useRouter()
     const handleErrors = () => {
         const errorStatus = currentErrors.some((err) => err.status === true);
         console.log(currentErrors.length, errorStatus)
@@ -103,7 +99,7 @@ const RevewOrderPage: React.FC = () => {
         amount: string,
         gatewayId: string,
         gatewayData: any,
-        guestIdentityId: string
+        guestIdentityId: string | null,
     ): void => {
         const body: CheckoutPostBodyProps = {
             amount: amount,
@@ -120,8 +116,8 @@ const RevewOrderPage: React.FC = () => {
         async (
             paymentDetailInfo: PaymentDetailInfoProps,
             infoDetails: userInfoProps,
-            identityId: string,
-            amount: AmountProps,
+            identityId: string | null,
+            amount: string,
             cartId: string,
         ) => {
             const anyErrors = handleErrors();
@@ -129,29 +125,25 @@ const RevewOrderPage: React.FC = () => {
                 return;
             }
             const user = await ensureUser(paymentDetailInfo, infoDetails);
-            console.log('user:', user);
-            if (amount && (user || identityId.length > 0)) {
-                console.log(amount, 'ttt')
+            if (amount && (user)) {
+                const identity_id = user.data.identity._data[0].id;
                 // if addon flow
                 // addon flow logic ...
 
                 // if general flow
-                if (amount.string == '0') {
-                    createCheckoutPostBody(amount.string, "free", {}, identityId);
+                if (amount == '0') {
+                    createCheckoutPostBody(amount, "free", {}, identity_id);
                 } else if (cartId) {
                     createCheckoutPostBody(
-                        amount.string,
+                        amount,
                         "stripe",
                         {
                             // pay by card
                             source: cartId,
                         },
-                        identityId
+                        identity_id,
                     );
-                    console.log(checkoutPostBody, 'body')
                 }
-
-
                 // if (checkoutPostBody && cartInfo.id) {
                 //     try {
                 //         const resp = await checkOut(cartInfo.id, checkoutPostBody);
@@ -179,8 +171,7 @@ const RevewOrderPage: React.FC = () => {
                 // general flow
 
             }
-            console.log("Collecting info...");
-            setTriggerPayment(false);
+            setIsTriggerPayment(false);
         }, []
     )
 
@@ -269,13 +260,13 @@ const RevewOrderPage: React.FC = () => {
                     // }
                     // completeCheckout();
                 }
-                if ('card' in cardDetails && infoDetails.email.length > 0) {
+                if ('id' in cardDetails && 'card' in cardDetails && infoDetails.email.length > 0) {
                     const cardInfo = cardDetails as { card: { country: string; address_zip: string } };
                     const paymentDetailInfo: PaymentDetailInfoProps = {
                         country: cardInfo.card.country,
                         zipCode: cardInfo.card.address_zip,
                     };
-                    const cartId: string = cardDetails.id;
+                    const cartId = cardDetails.id as string;
                     if (amount) {
 
                         await completeCheckout(paymentDetailInfo, infoDetails, identityId, amount.string, cartId);
@@ -287,16 +278,21 @@ const RevewOrderPage: React.FC = () => {
                 setCheckoutPostBody(null);
                 // checkout
                 try {
-                    const resp = await checkOut(cartInfo.id, body);
-                    setCheckoutResp(resp);
-                    console.log(resp, 'finally');
+                    const resp = await checkOut(cartInfo.id, body, meta.city?.key);
+                    setCheckoutResp(resp.data);
                     // clear interval
                     // ...
 
                     // SEGMENT IDENTIFY
                     // ...
-                    // return resp;
 
+
+                    return true;
+
+
+                    // return true;
+
+                    // checkout result data
 
                 } catch (err: any) {
                     if (err.description) {
@@ -304,6 +300,12 @@ const RevewOrderPage: React.FC = () => {
                     }
                     return false;
                 }
+            }
+            // console.log('checkout:',checkoutPostBody,checkoutResp, hasRedirected)
+            if (!checkoutPostBody && checkoutResp) {
+                // jump to order confirmation page 
+                setHasRedirected(true);
+                router.push(`/${meta.city?.key}/order-confirmation`);
             }
         };
         processCheckout();
@@ -321,6 +323,8 @@ const RevewOrderPage: React.FC = () => {
         cartInfo,
         identityId,
         checkoutPostBody,
+        checkoutResp
+        // hasRedirected
     ]);
 
     return (
@@ -329,7 +333,7 @@ const RevewOrderPage: React.FC = () => {
                 <div>
                     <OrderReviewCard {...details} />
                     {amount && <PaymentDetails sellerId={meta.city?.id} amount={amount?.number} onError={handleError} />}
-                    <InfoForm onError={handleError} cityCode={meta.city?.code} />
+                    <InfoForm onError={handleError} cityCode={meta.city?.code} cityKey={meta.city?.key} />
                 </div>
             )}
         </>

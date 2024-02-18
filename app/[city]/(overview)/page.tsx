@@ -1,5 +1,5 @@
 import { lusitana } from '@/app/ui/fonts';
-// import { Suspense } from 'react';
+import { Suspense } from 'react';
 
 export default async function Page() {
     // const revenue = await fetchRevenue();
@@ -16,9 +16,12 @@ export default async function Page() {
             <h1 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
                 Dashboard123
             </h1>
+            <Suspense>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                 333
             </div>
+                </Suspense>
+            
             <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8">
                333
             </div>

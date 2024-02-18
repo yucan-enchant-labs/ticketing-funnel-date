@@ -4,7 +4,8 @@ import NavLinks from "../nav-links";
 import { MetaProps } from "@/app/types/state";
 // const Page: React.FC<{ meta: MetaProps }> = ({ meta }) => {
 const Page: React.FC = () => {
-    return (
+
+  return (
     <>
       <h1>Review Order</h1>
       <RevewOrderPage />

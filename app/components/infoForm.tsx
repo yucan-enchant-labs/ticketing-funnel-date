@@ -1,15 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "@/app/components/ui/input";
 import { Button } from "@/app/components/ui/button";
 import { Checkbox } from 'antd';
-import type { CheckboxProps } from 'antd';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useSetAtom, useAtomValue } from "jotai";
+import { useSetAtom, useAtom, useAtomValue } from "jotai";
 import { errorAtom } from "@/app/states/common";
-import { triggerPayment, userInfoAtom } from "@/app/states/order";
+import { triggerPayment, userInfoAtom, checkoutResultAtom } from "@/app/states/order";
 import { userInfoProps } from "@/app/types/order";
-import { ErrorProps } from "../types/state";
 import Link from "next/link";
 import { z } from "zod";
 import {
@@ -47,14 +45,15 @@ type FormSchemaType = UppercaseFirstLetter<z.infer<typeof formSchema>>;
 
 export const InfoForm: React.FC<{
     onError: (errorType: string, errorMsg: string) => void,
-    cityCode: string
-}> = ({ onError, cityCode }) => {
+    cityCode: string,
+    cityKey: string,
+}> = ({ onError, cityCode, cityKey }) => {
     const [termsChecked, setTermsChecked] = useState<boolean>(false);
-    const setTriggerPayment = useSetAtom(triggerPayment);
+    const [isTriggerPayment, setIsTriggerPayment] = useAtom(triggerPayment);
     const setUserInfo = useSetAtom(userInfoAtom);
     const setErrors = useSetAtom(errorAtom);
     const errors = useAtomValue(errorAtom);
-
+    // const checkoutResp = useAtomValue(checkoutResultAtom);
     const form = useForm<FormSchemaType>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -65,7 +64,6 @@ export const InfoForm: React.FC<{
             confirm_email: "",
         },
     });
-
     const formatLabel = (name: string | number): string | number => {
         if (typeof name === 'string') {
             return name.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
@@ -123,7 +121,7 @@ export const InfoForm: React.FC<{
         } else {
             return;
         }
-        setTriggerPayment(true);
+        setIsTriggerPayment(true);
         // await completeCheckout();
     };
 
@@ -168,9 +166,7 @@ export const InfoForm: React.FC<{
                         )}
 
                     </Checkbox>
-
-                    {/* Sorry, you must read and accept the Ticketing terms & conditions to process your order */}
-                    <Button type="button" onClick={onSubmit}>
+                    <Button type="button" disabled={isTriggerPayment} onClick={onSubmit}>
                         Complete Order
                     </Button>
                 </form>

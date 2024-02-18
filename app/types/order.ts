@@ -61,10 +61,10 @@ export type userInfoProps = {
 }
 
 export type CheckoutPostBodyProps = {
-    amount: number;
+    amount: string;
     gateway_id: string;
     gateway_data: any;
-    guest_identity_id: string;
+    guest_identity_id: string|null;
 };
 
 export type AmountProps = { number: number; string: string } | null;

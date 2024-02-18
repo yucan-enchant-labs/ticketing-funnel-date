@@ -1,4 +1,4 @@
-import { axiosTicketure } from "../page";
+import { axiosTicketure, axiosEnchant } from "../page";
 import { userInfoProps, CheckoutPostBodyProps } from "../types/order";
 
 export const createCart = async (sellerId: string | undefined): Promise<{
@@ -79,6 +79,21 @@ export const checkOut = async (cartId: string, body: CheckoutPostBodyProps): Pro
   } catch (err) {
     let errMsg =
       "Your card was declined, please confirm the entered information.";
+    throw { description: errMsg };
+    // this.$store.dispatch("setCardError", errMsg);
+  }
+};
+
+export const fetchRespData = async (id:{ticketureOrderId:string}) => {
+  try {
+    const resp = await axiosEnchant.post(
+      `/v1/order/`,
+      id,
+    );
+    return resp;
+  } catch (err) {
+    let errMsg =
+      "Could not fetch the data.";
     throw { description: errMsg };
     // this.$store.dispatch("setCardError", errMsg);
   }
