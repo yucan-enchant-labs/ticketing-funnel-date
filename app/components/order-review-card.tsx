@@ -4,16 +4,20 @@
  */
 import { OrderDetailProps } from "../types/order"
 import { formatDate } from "../lib/formattedDate";
+import { timerAtom } from "../states/order";
+import { useAtomValue } from "jotai";
 
 export function OrderReviewCard({ info, details }: OrderDetailProps) {
+  const timer = useAtomValue(timerAtom);
   const fees = details.fees;
   const tickets = details.tickets;
   return (
-    <div className="bg-white rounded-lg shadow-md w-[315px]">
+    // <div className="bg-white rounded-lg shadow-md w-[315px]">
+    <div className="bg-white rounded-lg shadow-md w-full">
       <div className="flex items-center gap-2 justify-start border-b p-4">
         <ClockIcon className="text-gray-500" />
         <div className="text-sm">
-          <span className="font-semibold">8:14 mins</span> remaining
+        <span className="font-semibold">{timer} mins</span> remaining
         </div>
       </div>
       <div className="bg-gray-50 p-4 rounded-lg width-full">
@@ -47,7 +51,7 @@ export function OrderReviewCard({ info, details }: OrderDetailProps) {
         </div>
         <div className="flex justify-between py-2 border-b">
           <div>Tax</div>
-          <div>$3.36</div>
+          <div>{`$${Number(fees.tax).toFixed(2)}`}</div>
         </div>
         <div className="flex justify-between py-4">
           <div className="text-lg font-semibold">Order Total</div>

@@ -7,12 +7,9 @@ import { CardTitle, CardDescription, CardHeader, CardContent, CardFooter, Card }
 import { Calendar } from "../calendar"
 import { useSetAtom } from "jotai";
 import { sessionAtom } from "@/app/states/common";
-
-import { Button } from "../buttons"
 import { formatDate } from "@/app/lib/formattedDate";
 
 export function EncCalendar({ calendar }: { calendar: any }) {
-  const [available, setAvailable] = useState<boolean>(false);
   const [dates, setDates] = useState<Array<any>>([]);
   const soldOutDates: string[] = ["2024-02-14", "2024-02-15", "2024-02-16"];
   const soldOutDatesAsDate: Date[] = soldOutDates.map(dateString => new Date(dateString));
@@ -76,7 +73,7 @@ export const EncTime = ({ sessions, timezone }: { sessions: any[], timezone: str
     setTimes(formattedTimes);
   }, [sessions, timezone]);
 
-  const handleTimeClick = (timeId: string, start: string, end:string) => {
+  const handleTimeClick = (timeId: string, start: string, end: string) => {
     setSelectedTime(timeId);
     setSelectedSession((props: any) => ({
       ...props,
@@ -88,7 +85,7 @@ export const EncTime = ({ sessions, timezone }: { sessions: any[], timezone: str
 
   return (
     <div className="w-full">
-      <p className="mb-4">Select arrival time</p>
+      <h1 className="text-1xl font-semibold mb-2">Select arrival time</h1>
       <table className="w-full border-collapse">
         <tbody className="w-full">
           {Array.from({ length: Math.ceil(times.length / cellsPerRow) }, (_, rowIndex) => (
@@ -98,7 +95,7 @@ export const EncTime = ({ sessions, timezone }: { sessions: any[], timezone: str
                   key={time.id}
                   className={`h-[46px] p-4 text-center border border-solid border-gray-300 font-inter text-base font-bold cursor-pointer transition duration-300 ease-in-out ${selectedTime === time.id ? 'bg-gray-800 text-white' : 'hover:bg-gray-800 hover:text-white'
                     }`}
-                  onClick={() => handleTimeClick(time.id, time.formattedTimeStart,time.formattedTimeEnd)}
+                  onClick={() => handleTimeClick(time.id, time.formattedTimeStart, time.formattedTimeEnd)}
                 >
                   {time.formattedTimeStart}
                 </td>

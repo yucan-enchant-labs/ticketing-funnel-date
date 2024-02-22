@@ -3,6 +3,8 @@
 // import { useRouter } from 'next/navigation';
 import { Cities } from '../components/cities';
 import { City } from '@/app/lib/definitions';
+import { Suspense } from 'react';
+import Loading from '../loading';
 // import { Metadata } from 'next';
 // export const metadata: Metadata = {
 //     title: 'Locations',

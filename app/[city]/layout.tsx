@@ -15,7 +15,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <CusHeader city={meta.city} />
       
       {/* <div className="flex-grow p-6 md:overflow-y-auto md:p-12">{children}</div> */}
-      <div>{children}</div>
+      <div className="w-full flex flex-col gap-8">{children}</div>
       {/* <EncCalendar /> */}
 
       </ContainerWrapper>

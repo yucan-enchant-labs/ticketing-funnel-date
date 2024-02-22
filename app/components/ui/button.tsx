@@ -1,8 +1,14 @@
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
-
 import { cn } from "@/app/lib/utils"
+import { DateTime } from 'luxon';
+import { createCart } from '@/app/apis/order';
+import { processOrder } from '@/app/hooks/order';
+import { ReviewTicketProps } from "@/app/types/order";
+import { useSetAtom } from "jotai";
+import { cartAtom, selectedTicket, timerAtom } from "@/app/states/order";
+import Link from 'next/link';
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-gray-950 dark:focus-visible:ring-gray-300",
@@ -53,4 +59,61 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 )
 Button.displayName = "Button"
 
-export { Button, buttonVariants }
+const ReviewTicketButton: React.FC<ReviewTicketProps> = ({ canCheckout = false, ...props }) => {
+  const setTickets = useSetAtom(selectedTicket);
+  const setCart = useSetAtom(cartAtom);
+  const setTimer = useSetAtom(timerAtom);
+  const { tickets, sellerId, city, session } = props;
+  const reviewTickets = async () => {
+    const selectedTickets = tickets.filter((ticket) => ticket.qty > 0);
+    try {
+      await createCart(sellerId).then(async (resp) => {
+        setCart(resp);
+        if (resp.id) {
+          const orderResp = await processOrder(resp.id, selectedTickets, session);
+
+          const reservedOrder = orderResp.data;
+
+          const orderInfo = {
+            tickets: selectedTickets,
+            cart_fees: reservedOrder.cart_fees._data,
+            cart: reservedOrder.cart._data,
+          }
+          setTickets(orderInfo);
+          console.log('OrderInfo:', orderInfo)
+        }
+        const end = DateTime.fromISO(resp.expires_at).set({ millisecond: 0 });
+
+        const interval = setInterval(() => {
+            const now = DateTime.local();
+            const diff = end.diff(now);
+            const duration = diff.shiftTo('minutes', 'seconds');
+            if (diff.as('milliseconds') < 0) {
+                clearInterval(interval);
+                // Redirect or perform other actions when the time expires
+                window.location.href = "/";
+            }
+            setTimer(duration.toFormat('mm:ss'));
+        }, 1000);
+      });
+    } catch (error) {
+      console.error(error)
+      throw error;
+    }
+  };
+  return (
+    // <Link href={`/${city}/order-review`} passHref>
+    <Link href={`/${city}/order-review`}>
+      <Button
+        className="w-full bg-gray-700 rounded text-white py-3 mt-6"
+        onClick={reviewTickets}
+        disabled={!canCheckout}
+      >
+        Review Tickets
+      </Button>
+
+    </Link>
+  );
+};
+
+export { Button, buttonVariants, ReviewTicketButton }

@@ -12,7 +12,7 @@ export const EncHeader: React.FC<EncHeaderProps> = ({ city }) => {
     const code = city?.code || '';
     return (
         <RowSBCard>
-            <RowFSCard gap={8}>
+            <RowFSCard className='gap-2'>
                 <Image src={encLogo} alt="" width={20} height={20} />
                 <p>{code.toLocaleUpperCase()}</p>
             </RowFSCard>

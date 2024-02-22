@@ -85,11 +85,6 @@ export const RowFSCard = styled.div<FlexStart>`
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
-    ${props =>
-    props.gap !== undefined &&
-    css`
-        gap: ${props.gap}px;
-    `}
 `;
 
 export const PaymentOptContainer = styled.div`
@@ -98,7 +93,7 @@ export const PaymentOptContainer = styled.div`
   line-height: 20px;
   box-sizing: border-box;
   border: 1px solid #bbbbbb;
-  border-radius: 4px;
+  border-radius: 8px;
 
   .el-collapse-item__header {
     padding: 0 16px;

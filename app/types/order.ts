@@ -1,3 +1,4 @@
+import { TicketProps } from "./common"
 export type OrderDetailProps = {
     info: {
         location: string,
@@ -15,6 +16,14 @@ export type OrderDetailProps = {
 
         }
     }
+}
+
+export type ReviewTicketProps = {
+    tickets: TicketProps[];
+    sellerId: string | undefined;
+    city: string | undefined,
+    session: { [type: string]: string };
+    canCheckout: boolean,
 }
 
 export type paymentElementProps = {
@@ -64,7 +73,7 @@ export type CheckoutPostBodyProps = {
     amount: string;
     gateway_id: string;
     gateway_data: any;
-    guest_identity_id: string|null;
+    guest_identity_id: string | null;
 };
 
 export type AmountProps = { number: number; string: string } | null;

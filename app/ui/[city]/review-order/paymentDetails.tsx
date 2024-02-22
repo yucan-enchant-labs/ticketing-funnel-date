@@ -23,8 +23,8 @@ export const PaymentDetails: React.FC<{
         setError(errorMessage)
     };
     return (
-        <>
-            Payment Details
+        <div>
+            <h1 className="text-1xl font-semibold mb-2">Payment Details</h1>
             <PaymentOpts
                 browserType={browserType}
                 stripeAccount={account}
@@ -33,6 +33,6 @@ export const PaymentDetails: React.FC<{
                 onError={handleStripeError}
             />
             <p>{error}</p>
-        </>
+        </div>
     );
 };

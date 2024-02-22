@@ -278,7 +278,7 @@ const RevewOrderPage: React.FC = () => {
                 setCheckoutPostBody(null);
                 // checkout
                 try {
-                    const resp = await checkOut(cartInfo.id, body, meta.city?.key);
+                    const resp = await checkOut(cartInfo.id, body);
                     setCheckoutResp(resp.data);
                     // clear interval
                     // ...
@@ -330,8 +330,11 @@ const RevewOrderPage: React.FC = () => {
     return (
         <>
             {details && meta.city?.id && (
-                <div>
-                    <OrderReviewCard {...details} />
+                <div className='w-full flex gap-6 flex-col'>
+                    <div>
+                        <h1 className="text-1xl font-semibold mb-2">Review Order</h1>
+                        <OrderReviewCard {...details} />
+                    </div>
                     {amount && <PaymentDetails sellerId={meta.city?.id} amount={amount?.number} onError={handleError} />}
                     <InfoForm onError={handleError} cityCode={meta.city?.code} cityKey={meta.city?.key} />
                 </div>

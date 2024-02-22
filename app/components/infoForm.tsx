@@ -126,8 +126,8 @@ export const InfoForm: React.FC<{
     };
 
     return (
-        <>
-            Personal Details
+        <div>
+            <h1 className="text-1xl font-semibold mb-2">Personal Details</h1>
             <Form {...form}>
                 <form className="space-y-8">
                     {Object.keys(form.formState.defaultValues as {}).map((fieldName) => (
@@ -171,6 +171,6 @@ export const InfoForm: React.FC<{
                     </Button>
                 </form>
             </Form>
-        </>
+        </div>
     );
 };

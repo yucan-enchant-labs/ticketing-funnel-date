@@ -36,3 +36,5 @@ export const userInfoAtom = atom<userInfoProps>({
 export const triggerPayment = atom<boolean>(false);
 
 export const checkoutResultAtom = atom<any | null>(null)
+
+export const timerAtom = atom<any>(null);

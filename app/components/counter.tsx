@@ -5,25 +5,13 @@
 import { useEffect, useState } from 'react';
 import { Button } from "@/app/components/ui/button";
 import { TicketProps } from '../types/common';
-import { createCart } from '../apis/order';
-import { useSetAtom } from "jotai";
-import { cartAtom } from "../states/order";
-import { DateTime } from 'luxon';
-import { processOrder } from '../hooks/order';
-import { selectedTicket } from '../states/order';
-import Link from 'next/link';
 
 interface RegCounterProps {
-    city: string | undefined,
-    session: { [type: string]: string };
     tickets: TicketProps[];
-    sellerId: string | undefined;
+    ticketSelected: (selected: boolean) => void;
 }
-export const RegCounter: React.FC<RegCounterProps> = ({ city, session, tickets, sellerId }) => {
+export const RegCounter: React.FC<RegCounterProps> = ({ tickets, ticketSelected }) => {
     const [totalTickets, setTotalTickets] = useState(0);
-    const setTickets = useSetAtom(selectedTicket);
-    // const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
-    const setCart = useSetAtom(cartAtom);
 
 
     const add = (index: number) => {
@@ -48,51 +36,19 @@ export const RegCounter: React.FC<RegCounterProps> = ({ city, session, tickets, 
         ).length;
         return juniorOrInfantCount === selectedTickets.length;
     };
-    const reviewTickets = async () => {
-        const selectedTickets = tickets.filter((ticket) => ticket.qty > 0);
-        try {
-            await createCart(sellerId).then(async (resp) => {
-                setCart(resp);
-                if (resp.id) {
-                    const orderResp = await processOrder(resp.id, selectedTickets, session);
-
-                    const reservedOrder = orderResp.data;
-
-                    const orderInfo = {
-                        // tickets: reservedOrder.ticket._data,
-                        tickets: selectedTickets,
-                        cart_fees: reservedOrder.cart_fees._data,
-                        cart: reservedOrder.cart._data,
-                    }
-                    setTickets(orderInfo);
-                    console.log('OrderInfo:', orderInfo)
-                }
-                // const end = DateTime.fromISO(resp.expires_at).set({ millisecond: 0 });
-
-                // const interval = setInterval(() => {
-                //     const now = DateTime.local();
-                //     const diff = end.diff(now);
-                //     const duration = diff.shiftTo('minutes', 'seconds');
-                //     if (diff.as('milliseconds') < 0) {
-                //         clearInterval(interval);
-                //         // Redirect or perform other actions when the time expires
-                //         window.location.href = "/";
-                //     }
-                //     console.log(`Time remaining: ${duration.toFormat('mm:ss')}`);
-                // }, 1000);
-            });
-        } catch (error) {
-            console.error(error)
-            throw error;
+    useEffect(() => {
+        if (totalTickets !== 0 && !hasOnlyJuniorOrInfant()) {
+            ticketSelected(true);
+        } else {
+            ticketSelected(false);
         }
-    };
-
+    }, [totalTickets, hasOnlyJuniorOrInfant, ticketSelected]);
 
     return (
-        <div className="mx-auto w-full">
-            <h1 className="text-1xl font-semibold mb-3">Select tickets</h1>
-            <div className="border rounded-lg overflow-hidden">
-                {tickets.map((ticket, index) => (
+        <div className="w-full">
+            <h1 className="text-1xl font-semibold mb-2">Select tickets</h1>
+            <div className="w-full border rounded-lg overflow-hidden">
+                {tickets?.map((ticket, index) => (
                     <div key={index} className="flex items-center justify-between p-4 border-b">
                         <span className="text-lg">{ticket.name}</span>
                         <div className="flex items-center">
@@ -111,17 +67,6 @@ export const RegCounter: React.FC<RegCounterProps> = ({ city, session, tickets, 
                     </div>
                 ))}
             </div>
-
-            <Link href={`/${city}/order-review`} passHref>
-                <Button
-                    className="w-full bg-gray-700 rounded text-white py-3 mt-6"
-                    onClick={reviewTickets}
-                    disabled={totalTickets === 0 || hasOnlyJuniorOrInfant()}
-                >
-                    Review Tickets
-                </Button>
-
-            </Link>
         </div>
     );
 }
