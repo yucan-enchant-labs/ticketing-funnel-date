@@ -1,32 +1,29 @@
 'use client'
-import { useEffect } from 'react';
+import { useState } from 'react';
 import { useAtomValue } from 'jotai';
 import { metaAtom, sessionAtom, ticketAtom } from '@/app/states/common';
 import { EncCalendar, EncTime } from '../../selectTicket/calendar';
 import { RegCounter } from '@/app/components/counter';
-// import { eventTemplate } from '@/app/queries/eventGroups';
+import { ReviewTicketButton } from '@/app/components/ui/button';
 const GeneralAdmissionPage: React.FC = () => {
+  const [ticketSelected, setTicketSelected] = useState(false);
   const meta = useAtomValue(metaAtom);
   const tickets = useAtomValue(ticketAtom);
   const available = useAtomValue(sessionAtom);
-  useEffect(() => {
-  }, [meta, available])
 
-  //   const [getEvents] = await Promise.all([
-  // eventTemplate(meta.city?.id)
-  // ]);
-  // const eventTemp = eventTemplate(meta.city?.id);
   return (
     <>
-    {available.calendar && <EncCalendar calendar={available.calendar} />}
+      {available.calendar && <EncCalendar calendar={available.calendar} />}
       {available.sessions.length > 0 && <EncTime sessions={available.sessions} timezone={meta.city?.timezone || ''} />}
       {available.selectedSessionId.length > 0 &&
-        <RegCounter
-          city={meta.city?.code}
-          tickets={tickets.gaEvents}
-          session={{ 'ga': available.selectedSessionId }}
-          sellerId={meta.city?.id}
-        />}
+        <RegCounter tickets={tickets.gaEvents} ticketSelected={setTicketSelected} />}
+      {available.selectedSessionId.length > 0 && <ReviewTicketButton
+        tickets={tickets.gaEvents}
+        sellerId={meta.city?.id}
+        city={meta.city?.code}
+        session={{ 'ga': available.selectedSessionId }}
+        canCheckout={ticketSelected && available.selectedSessionId.length > 0}
+      />}
     </>
   );
 };
