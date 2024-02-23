@@ -18,7 +18,6 @@ export const PaymentDetails: React.FC<{
     const browserType: string = isSafari ? 'safari' : isChrome ? 'chrome' : '';
 
     const handleStripeError = (errorMessage: string) => {
-        console.log('yoyo', errorMessage)
         onError('payment', errorMessage);
         setError(errorMessage)
     };

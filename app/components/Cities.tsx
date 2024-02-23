@@ -2,6 +2,8 @@ import { CitiesProps } from "../lib/definitions";
 import Link from "next/link";
 import { selectCity } from "../hooks/common";
 import { RowSBCard, ColCTCard } from "../styles/container";
+import { useAtom } from 'jotai';
+import { flowAtom } from '../states/common';
 
 export const Cities: React.FC<CitiesProps> = ({ cities }) => {
     const { cityMeta } = selectCity();
@@ -29,6 +31,29 @@ export const Cities: React.FC<CitiesProps> = ({ cities }) => {
                     </RowSBCard>
                 </ColCTCard>
             </Link>
+        </>
+    );
+};
+
+
+export const FlowOpts: React.FC = () => {
+    const [, setFlow] = useAtom(flowAtom);
+    const flows = [
+        { flow: 'calendar', key: 1, name: 'Start with Calendar' },
+        { flow: 'tickets', key: 2, name: 'Start with Tickets' },
+    ];
+    const selectFlow = (key: string) => {
+        setFlow(key);
+    };
+    return (
+        <>
+            {flows.map((flow) => (
+                <ColCTCard key={flow.flow} onClick={() => selectFlow(flow.flow)}>
+                    <RowSBCard>
+                        <h3 className="inline-block text-lg font-semibold">{flow.name}</h3>
+                    </RowSBCard>
+                </ColCTCard>
+            ))}
         </>
     );
 };

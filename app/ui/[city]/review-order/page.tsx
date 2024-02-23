@@ -1,7 +1,7 @@
 'use client'
 import { OrderReviewCard } from '@/app/components/order-review-card';
 import { useEffect, useState, useCallback } from 'react';
-import { useAtomValue, useSetAtom, useAtom } from 'jotai';
+import { useAtomValue, useAtom } from 'jotai';
 import { metaAtom, sessionAtom, errorAtom } from '@/app/states/common';
 import { selectedTicket, userInfoAtom, cartAtom, checkoutResultAtom } from '@/app/states/order';
 import { OrderDetailProps } from '@/app/types/order';
@@ -70,30 +70,7 @@ const RevewOrderPage: React.FC = () => {
                 }
                 return false;
             }
-            // try {
-
-            //     await getUserInfo(userBody);
-            //     // Add error in the pop-up if there's a 409 error
-            //     // this.$store.dispatch("setUserInfo", user);
-            //     // console.log('fetchUser:', user);
-            //     // return user;
-            // } catch (err: any) {
-            //     if (err.response.data._data[0]._code === "conflict") {
-            //         //   this.$store.dispatch("setEmailError", "");
-            //         //   this.errorMsg = "";
-            //         setIdentityId(err.response.data._data[0]._extra.identity_id);
-            //     } else {
-            //         if (err?.response?.data?.details?._data[0]?._description) {
-            //             handleError('userEmail', err?.response?.data?.details?._data[0]?._description)
-            //         }
-            //     }
-            //     throw "Could not create user";
-            //     // }
-            // }
-            // Continue with other steps
-            // completeCheckout();
-
-        }, [])
+        }, []);
 
     const createCheckoutPostBody = (
         amount: string,
@@ -144,32 +121,6 @@ const RevewOrderPage: React.FC = () => {
                         identity_id,
                     );
                 }
-                // if (checkoutPostBody && cartInfo.id) {
-                //     try {
-                //         const resp = await checkOut(cartInfo.id, checkoutPostBody);
-                //         setCheckoutResp(resp);
-                //         console.log(resp, 'finally');
-                //         // clear interval
-                //         // ...
-                //         setTriggerPayment(false);
-
-                //         // SEGMENT IDENTIFY
-                //         // ...
-                //         // return resp;
-                //     } catch (err: any) {
-                //         if (err.description) {
-                //             setTriggerPayment(false);
-                //             handleError('card', err.description);
-                //         }
-                //         return false;
-                //     }
-                // }
-
-                // if addon flow
-                // addon flow logic ...
-
-                // general flow
-
             }
             setIsTriggerPayment(false);
         }, []
@@ -301,7 +252,6 @@ const RevewOrderPage: React.FC = () => {
                     return false;
                 }
             }
-            // console.log('checkout:',checkoutPostBody,checkoutResp, hasRedirected)
             if (!checkoutPostBody && checkoutResp) {
                 // jump to order confirmation page 
                 setHasRedirected(true);

@@ -132,7 +132,6 @@ export const selectCity = () => {
         eventMeta: eventMeta || prevMeta.eventMeta,
         suiteEventMeta: suiteEventMeta || prevMeta.suiteEventMeta,
       }));
-      // console.log('sysys', ticketTypes, 2, tmpGroup, 3, tmpAddonGroups, 4, addonEvent, 5, tmpAddonEventDetails, 6, tempEvents);
       // set ticket meta
       setTicketMeta(() => ({
         ticketTypes: ticketTypes,
@@ -163,6 +162,5 @@ const createCalendar = (ticketTypes: any, ticketGroup: any) => {
 
 export const selectDate = async () => {
   const ticketInfo = useAtomValue(sessionAtom);
-  console.log(ticketInfo, 'infofofo')
   // const eventData = await getSessions(city.id);
 }

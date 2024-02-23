@@ -8,6 +8,7 @@ export const uppercaseAtom = atom(
   (get) => get(textAtom).toUpperCase()
 )
 
+export const flowAtom = atom<string|null>(null);
 export const metaAtom = atom<MetaProps>({});
 export const ticketAtom = atom<any>({});
 export const sessionAtom = atom({
